@@ -1,10 +1,11 @@
 import json
-from unittest.mock import patch, mock_open
+from unittest.mock import mock_open, patch
+
 from src.classes import Category
 from src.utils import get_data_from_json
 
 
-def test_get_data_from_json():
+def test_get_data_from_json() -> None:
     """Тест загрузки данных из JSON файла"""
 
     # 1. Подготавливаем mock-данные
@@ -14,8 +15,13 @@ def test_get_data_from_json():
             "description": "Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни",
             "products": [
                 {"name": "iPhone 15", "description": "512GB, Gray space", "price": 210000.0, "quantity": 8},
-                {"name": "Samsung Galaxy C23 Ultra", "description": "256GB, Серый цвет, 200MP камера", "price": 180000.0, "quantity": 5}
-            ]
+                {
+                    "name": "Samsung Galaxy C23 Ultra",
+                    "description": "256GB, Серый цвет, 200MP камера",
+                    "price": 180000.0,
+                    "quantity": 5,
+                },
+            ],
         }
     ]
 
