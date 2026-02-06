@@ -1,5 +1,5 @@
-from src.utils import get_data_from_json, PATH_TO_JSON_FILE
 from src.classes import Category
+from src.utils import PATH_TO_JSON_FILE, get_data_from_json
 
 if __name__ == "__main__":
     result = get_data_from_json(PATH_TO_JSON_FILE)
