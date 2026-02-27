@@ -1,57 +1,57 @@
+import pytest
 from src.classes import Category, Product
 
 
-def test_product_init(product_iphone: Product) -> None:
-    """Тест инициализации объектов класса Product"""
-    assert product_iphone.name == "iPhone 15"
-    assert product_iphone.description == "512GB, Gray space"
-    assert product_iphone.price == 210000.0
-    assert product_iphone.quantity == 8
+def test_product_price_setter(product_iphone: Product) -> None:
+    """Тест установки корректной цены"""
+    product_iphone.price = 250000.0
+    assert product_iphone.price == 250000.0
 
 
-def test_category_init(product_iphone: Product, product_samsung: Product) -> None:
-    """Тест инициализации категории и подсчета товаров в ней"""
-
-    products = [product_iphone, product_samsung]
-    category = Category(
-        "Смартфоны",
-        "Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни",
-        products,
-    )
-
-    assert category.name == "Смартфоны"
-    assert (
-        category.description
-        == "Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни"
-    )
-    assert len(category.products) == 2
-    assert category.products[0].name == "iPhone 15"
+def test_product_price_setter_invalid(product_iphone: Product, capsys) -> None:
+    """Тест установки некорректной цены (0 или отрицательная)"""
+    product_iphone.price = -100
+    captured = capsys.readouterr()
+    assert "Цена не должна быть нулевая или отрицательная" in captured.out
+    assert product_iphone.price == 210000.0  # Цена не изменилась
 
 
-def test_category_counters() -> None:
-    """Тест счетчиков категорий и товаров"""
+def test_product_price_reduction_confirm(product_iphone: Product, monkeypatch) -> None:
+    """Тест подтверждения снижения цены (ввод 'y')"""
+    # Симулируем ввод 'y' в терминал
+    monkeypatch.setattr('builtins.input', lambda _: "y")
+    product_iphone.price = 150000.0
+    assert product_iphone.price == 150000.0
 
-    product_1 = Product("Samsung Galaxy C23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
-    product_2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
-    product_3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
-    product_4 = Product("55 QLED 4K", "Фоновая подсветка", 123000.0, 7)
 
-    category_1 = Category(
-        "Смартфоны",
-        "Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни",
-        [product_1, product_2, product_3],
-    )
-    category_2 = Category(
-        "Телевизоры",
-        "Современный телевизор, который позволяет наслаждаться просмотром, станет вашим другом и помощником",
-        [product_4],
-    )
+def test_product_price_reduction_reject(product_iphone: Product, monkeypatch) -> None:
+    """Тест отмены снижения цены (ввод 'n')"""
+    monkeypatch.setattr('builtins.input', lambda _: "n")
+    product_iphone.price = 150000.0
+    assert product_iphone.price == 210000.0  # Осталась старой
 
-    # Проверяем, что создано 2 категории
-    assert Category.category_count == 2
 
-    # Проверяем, что общее количество товаров 4
-    assert Category.product_count == 4
+def test_new_product_merge(product_iphone: Product) -> None:
+    """Тест создания товара с объединением дублей (регистронезависимо)"""
+    products_list = [product_iphone]
+    # Добавляем такой же айфон, но дороже и в другом регистре
+    new_obj = Product.new_product("IPHONE 15", "Space Gray", 300000.0, 2, products_list)
 
-    assert len(category_1.products) == 3  # Проверяем, что в category_1 ровно 3 товара
-    assert len(category_2.products) == 1  # Проверяем, что в category_2 ровно 1 товар
+    assert new_obj.quantity == 10  # 8 + 2
+    assert new_obj.price == 300000.0  # Выбрана максимальная
+    assert len(products_list) == 1  # Новый объект не создался в списке
+
+
+def test_category_products_format(product_iphone: Product) -> None:
+    """Тест строкового представления товаров в категории через геттер"""
+    category = Category("Смартфоны", "Описание", [product_iphone])
+    expected_output = "iPhone 15, 210000.0 руб. Остаток: 8 шт. \n"
+    assert category.products == expected_output
+
+
+def test_add_product_logic(product_samsung: Product) -> None:
+    """Тест метода add_product и обновления счетчика"""
+    category = Category("Электроника", "...", [])
+    initial_count = Category.product_count
+    category.add_product(product_samsung)
+    assert Category.product_count == initial_count + 1

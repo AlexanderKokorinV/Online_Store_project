@@ -38,8 +38,9 @@ def test_get_data_from_json() -> None:
     # 3. Проверки
     assert len(result) == 1
     assert result[0].name == "Смартфоны"
-    assert len(result[0].products) == 2
-    assert result[0].products[0].name == "iPhone 15"
+    assert "iPhone 15" in result[0].products
+    assert "Samsung Galaxy C23 Ultra" in result[0].products
+    assert len(result[0].products.strip().split('\n')) == 2
 
     # 4. Проверка работы счетчиков внутри классов
     assert Category.category_count == 1
