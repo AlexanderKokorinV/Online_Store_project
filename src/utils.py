@@ -19,7 +19,7 @@ def get_data_from_json(PATH_TO_JSON_FILE: str) -> List[Category]:
 
     categories = []
     for item in data:
-        # Создаем список объектов Product для текущей категории
+        # 1. Создаем список объектов Product для текущей категории
         product_objects = []
         for prod_data in item.get("products", []):
             product = Product(
