@@ -1,4 +1,5 @@
-import pytest
+from typing import Any
+
 from src.classes import Category, Product
 
 
@@ -8,7 +9,7 @@ def test_product_price_setter(product_iphone: Product) -> None:
     assert product_iphone.price == 250000.0
 
 
-def test_product_price_setter_invalid(product_iphone: Product, capsys) -> None:
+def test_product_price_setter_invalid(product_iphone: Product, capsys: Any) -> None:
     """Тест установки некорректной цены (0 или отрицательная)"""
     product_iphone.price = -100
     captured = capsys.readouterr()
@@ -16,17 +17,17 @@ def test_product_price_setter_invalid(product_iphone: Product, capsys) -> None:
     assert product_iphone.price == 210000.0  # Цена не изменилась
 
 
-def test_product_price_reduction_confirm(product_iphone: Product, monkeypatch) -> None:
+def test_product_price_reduction_confirm(product_iphone: Product, monkeypatch: Any) -> None:
     """Тест подтверждения снижения цены (ввод 'y')"""
     # Симулируем ввод 'y' в терминал
-    monkeypatch.setattr('builtins.input', lambda _: "y")
+    monkeypatch.setattr("builtins.input", lambda _: "y")
     product_iphone.price = 150000.0
     assert product_iphone.price == 150000.0
 
 
-def test_product_price_reduction_reject(product_iphone: Product, monkeypatch) -> None:
+def test_product_price_reduction_reject(product_iphone: Product, monkeypatch: Any) -> None:
     """Тест отмены снижения цены (ввод 'n')"""
-    monkeypatch.setattr('builtins.input', lambda _: "n")
+    monkeypatch.setattr("builtins.input", lambda _: "n")
     product_iphone.price = 150000.0
     assert product_iphone.price == 210000.0  # Осталась старой
 
