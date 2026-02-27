@@ -10,18 +10,19 @@ class Product:
         self.__price = price
         self.quantity = quantity
 
-
     @classmethod
-    def new_product(cls, name: str, description: str, price: float, quantity: int, products_list: List["Product"]) -> "Product":
+    def new_product(
+        cls, name: str, description: str, price: float, quantity: int, products_list: List["Product"]
+    ) -> "Product":
         """Принимает на вход параметры товара в словаре и возвращает созданный объект класса Product"""
 
-        for product in products_list: # Перебираем имеющийся список товаров
-            if product.name.lower() == name.lower(): # Если товар найден, суммируем количество
+        for product in products_list:  # Перебираем имеющийся список товаров
+            if product.name.lower() == name.lower():  # Если товар найден, суммируем количество
                 product.quantity += quantity
                 product.price = max(product.price, price)
                 return product
 
-        return cls(name, description, price, quantity) # Если совпадений не найдено, создаем и возвращаем новый объект
+        return cls(name, description, price, quantity)  # Если совпадений не найдено, создаем и возвращаем новый объект
 
     @property
     def price(self) -> float:
@@ -35,7 +36,7 @@ class Product:
             print("Цена не должна быть нулевая или отрицательная")
             return
 
-        if new_price < self.__price: # В случае если цена товара понижается
+        if new_price < self.__price:  # В случае если цена товара понижается
             confirm = input(f"Вы хотите снизить цену с {self.__price} до {new_price} руб.? (y/n): ")
             if confirm.lower() == "y":
                 self.__price = new_price
@@ -44,6 +45,7 @@ class Product:
                 print("Действие отменено, цена осталась прежней")
         else:
             self.__price = new_price
+
 
 class Category:
     """Класс для представления категорий"""
@@ -63,7 +65,6 @@ class Category:
         """Добавляет товары в категорию"""
         self.__products.append(product)
         Category.product_count += 1
-
 
     @property
     def products(self) -> str:
