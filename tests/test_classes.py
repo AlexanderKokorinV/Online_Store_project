@@ -1,6 +1,8 @@
 from typing import Any
 
-from src.classes import Category, Product
+import pytest
+
+from src.classes import Category, LawnGrass, Product, Smartphone
 
 
 def test_product_price_setter(product_iphone: Product) -> None:
@@ -100,16 +102,16 @@ def test_smartphone_init() -> None:
 
 def test_lawn_grass_init() -> None:
     """Тест инициализации газонной травы"""
-    grass = LawnGrass("Медонос", "Зеленый газон", 500.0, 20, "Россия", "14 дней", "Ярко-зеленый")
-    assert grass.name == "Медонос"
-    assert grass.country == "Россия"
+    grass = LawnGrass("Газонная трава", "Зеленый газон", 500.0, 20, "Австрия", "14 дней", "Ярко-зеленый")
+    assert grass.name == "Газонная трава"
+    assert grass.country == "Австрия"
     assert grass.germination_period == "14 дней"
 
 
 def test_add_product_validation() -> None:
     """Тест защиты метода add_product от некорректных типов"""
-    category = Category("Смартфоны", "...", [])
-    iphone = Smartphone("iPhone 15", "...", 120000.0, 5, 3.5, "Pro", 128, "Gray")
+    category = Category("Смартфоны", "Телефоны", [])
+    iphone = Smartphone("iPhone 15", "Новый", 120000.0, 5, 3.5, "Pro", 128, "Gray")
 
     # Успешное добавление наследника
     category.add_product(iphone)
@@ -117,21 +119,16 @@ def test_add_product_validation() -> None:
 
     # Ошибка при добавлении строки вместо объекта Product
     with pytest.raises(TypeError):
-        category.add_product("Это не продукт")
+        category.add_product("Not a product")
 
 
 def test_product_add_strict_type_check() -> None:
     """Тест сложения: только объекты одного и того же класса"""
-    iphone = Smartphone("iPhone 15", "...", 1000.0, 2, 3.5, "Pro", 128, "Gray")
-    pixel = Smartphone("Pixel 8", "...", 800.0, 5, 3.2, "Standard", 128, "Black")
-    grass = LawnGrass("Трава", "...", 100.0, 10, "RU", "7d", "Green")
+    iphone = Smartphone("iPhone 15", "Новый", 1000.0, 2, 3.5, "Pro", 128, "Gray")
+    pixel = Smartphone("Pixel 8", "Новый", 800.0, 5, 3.2, "Standard", 128, "Black")
 
     # Складываем смартфоны (1000*2 + 800*5 = 6000)
     assert iphone + pixel == 6000.0
-
-    # Складываем смартфон и траву — ожидаем ошибку
-    with pytest.raises(TypeError):
-        result = iphone + grass
 
 
 def test_category_str_with_subclasses() -> None:

@@ -53,10 +53,10 @@ class Product:
 
     def __add__(self, other: "Product") -> float:
         """Складывает два продукта одного класса и возвращает полную стоимость всех товаров обоих видов на складе"""
-        if type(self) is type(other): # Проверяем, что объекты принадлежат строго одному и тому же классу
+        if type(self) is type(other):  # Проверяем, что объекты принадлежат строго одному и тому же классу
             return (self.price * self.quantity) + (other.price * other.quantity)
 
-        raise TypeError # Если типы разные, вызываем исключение
+        raise TypeError  # Если типы разные, вызываем исключение
 
 
 class Category:
@@ -89,7 +89,7 @@ class Category:
             Category.product_count += 1
 
         else:
-            raise TypeError # Выбрасываем ошибку типа в случае попытки добавить не продукт
+            raise TypeError  # Выбрасываем ошибку типа в случае попытки добавить не продукт
 
     @property
     def products(self) -> str:
@@ -105,10 +105,20 @@ class Category:
         return self.__products
 
 
-
 class Smartphone(Product):
     """Класс для представления категории Смартфоны"""
-    def __init__(self, name: str, description: str, price: float, quantity: int, efficiency: float, model: str, memory: int, color: str) -> None:
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        efficiency: float,
+        model: str,
+        memory: int,
+        color: str,
+    ) -> None:
         """Конструктор для категории Смартфоны"""
         super().__init__(name, description, price, quantity)
         self.efficiency = efficiency
@@ -117,14 +127,21 @@ class Smartphone(Product):
         self.color = color
 
 
-
 class LawnGrass(Product):
     """Класс для представления категории Трава газонная"""
-    def __init__(self, name: str, description: str, price: float, quantity: int, country: str, germination_period: str, color: str) -> None:
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        country: str,
+        germination_period: str,
+        color: str,
+    ) -> None:
         """Конструктор для категории Трава газонная"""
         super().__init__(name, description, price, quantity)
         self.country = country
         self.germination_period = germination_period
         self.color = color
-
-
