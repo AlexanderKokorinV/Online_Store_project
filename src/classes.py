@@ -5,6 +5,7 @@ class Product:
     """Класс для представления продуктов"""
 
     def __init__(self, name: str, description: str, price: float, quantity: int):
+        """Конструктор для продукта"""
         self.name = name
         self.description = description
         self.__price = price
@@ -51,8 +52,11 @@ class Product:
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other: "Product") -> float:
-        """Складывает два продукта и возвращает полную стоимость всех товаров обоих видов на складе"""
-        return (self.price * self.quantity) + (other.price * other.quantity)
+        """Складывает два продукта одного класса и возвращает полную стоимость всех товаров обоих видов на складе"""
+        if type(self) is type(other): # Проверяем, что объекты принадлежат строго одному и тому же классу
+            return (self.price * self.quantity) + (other.price * other.quantity)
+
+        raise TypeError # Если типы разные, вызываем исключение
 
 
 class Category:
@@ -62,6 +66,7 @@ class Category:
     product_count = 0  # Атрибут класса для подсчета продуктов
 
     def __init__(self, name: str, description: str, products: List[Product]):
+        """Конструктор для категории"""
         self.name = name
         self.description = description
         self.__products = products
@@ -78,9 +83,13 @@ class Category:
         return f"{self.name}, количество продуктов: {total_quantity} шт."
 
     def add_product(self, product: Product) -> None:
-        """Добавляет товары в категорию"""
-        self.__products.append(product)
-        Category.product_count += 1
+        """Добавляет товары в категорию. Проверяет, является ли объект экземпляром класса Product или его наследником"""
+        if isinstance(product, Product):
+            self.__products.append(product)
+            Category.product_count += 1
+
+        else:
+            raise TypeError # Выбрасываем ошибку типа в случае попытки добавить не продукт
 
     @property
     def products(self) -> str:
@@ -94,3 +103,28 @@ class Category:
     def products_list(self) -> List[Product]:
         """Геттер, возвращающий сам список объектов"""
         return self.__products
+
+
+
+class Smartphone(Product):
+    """Класс для представления категории Смартфоны"""
+    def __init__(self, name: str, description: str, price: float, quantity: int, efficiency: float, model: str, memory: int, color: str) -> None:
+        """Конструктор для категории Смартфоны"""
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+
+
+class LawnGrass(Product):
+    """Класс для представления категории Трава газонная"""
+    def __init__(self, name: str, description: str, price: float, quantity: int, country: str, germination_period: str, color: str) -> None:
+        """Конструктор для категории Трава газонная"""
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
+
+

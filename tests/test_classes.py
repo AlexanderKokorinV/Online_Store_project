@@ -86,3 +86,59 @@ def test_category_products_getter_with_str(product_iphone: Product) -> None:
     # Геттер должен вернуть строку, сформированную через __str__ продукта
     expected_output = "iPhone 15, 210000.0 руб. Остаток: 8 шт.\n"
     assert category.products == expected_output
+
+
+def test_smartphone_init() -> None:
+    """Тест инициализации смартфона со специфичными атрибутами"""
+    iphone = Smartphone("iPhone 15", "Gray", 120000.0, 5, 3.5, "Pro Max", 512, "Серый")
+    assert iphone.name == "iPhone 15"
+    assert iphone.efficiency == 3.5
+    assert iphone.model == "Pro Max"
+    assert iphone.memory == 512
+    assert iphone.color == "Серый"
+
+
+def test_lawn_grass_init() -> None:
+    """Тест инициализации газонной травы"""
+    grass = LawnGrass("Медонос", "Зеленый газон", 500.0, 20, "Россия", "14 дней", "Ярко-зеленый")
+    assert grass.name == "Медонос"
+    assert grass.country == "Россия"
+    assert grass.germination_period == "14 дней"
+
+
+def test_add_product_validation() -> None:
+    """Тест защиты метода add_product от некорректных типов"""
+    category = Category("Смартфоны", "...", [])
+    iphone = Smartphone("iPhone 15", "...", 120000.0, 5, 3.5, "Pro", 128, "Gray")
+
+    # Успешное добавление наследника
+    category.add_product(iphone)
+    assert len(category.products_list) == 1
+
+    # Ошибка при добавлении строки вместо объекта Product
+    with pytest.raises(TypeError):
+        category.add_product("Это не продукт")
+
+
+def test_product_add_strict_type_check() -> None:
+    """Тест сложения: только объекты одного и того же класса"""
+    iphone = Smartphone("iPhone 15", "...", 1000.0, 2, 3.5, "Pro", 128, "Gray")
+    pixel = Smartphone("Pixel 8", "...", 800.0, 5, 3.2, "Standard", 128, "Black")
+    grass = LawnGrass("Трава", "...", 100.0, 10, "RU", "7d", "Green")
+
+    # Складываем смартфоны (1000*2 + 800*5 = 6000)
+    assert iphone + pixel == 6000.0
+
+    # Складываем смартфон и траву — ожидаем ошибку
+    with pytest.raises(TypeError):
+        result = iphone + grass
+
+
+def test_category_str_with_subclasses() -> None:
+    """Тест __str__ категории, содержащей разные подклассы продуктов"""
+    iphone = Smartphone("iPhone 15", "...", 100.0, 10, 3.5, "Pro", 128, "Gray")
+    grass = LawnGrass("Трава", "...", 50.0, 20, "RU", "7d", "Green")
+    category = Category("Разное", "...", [iphone, grass])
+
+    # 10 смартфонов + 20 единиц травы = 30 шт.
+    assert str(category) == "Разное, количество продуктов: 30 шт."
