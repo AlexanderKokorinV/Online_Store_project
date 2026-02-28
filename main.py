@@ -1,47 +1,27 @@
-from src.classes import Product
+from src.classes import Product, Category
 from src.utils import PATH_TO_JSON_FILE, get_data_from_json
 
 
-def main() -> None:
-    categories = get_data_from_json(PATH_TO_JSON_FILE)
 
-    if not categories:
-        print("Данные не загружены.")
-        return
+if __name__ == '__main__':
+    product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
+    product2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
+    product3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
 
-    # 1. Выводим список товаров первой категории через геттер
-    first_category = categories[0]
-    print(f"Категория: {first_category.name}")
-    print(first_category.products)
+    print(str(product1))
+    print(str(product2))
+    print(str(product3))
 
-    # 3. Создание нового товара через new_product и добавление в категорию
-    print("Добавление нового товара через new_product")
-
-    # Создаем/обновляем товар (используя данные, которых нет в JSON)
-    new_prod_data = {"name": "Sony", "description": "XRay", "price": 15000.0, "quantity": 10}
-
-    current_list = first_category.products_list
-
-    new_obj = Product.new_product(
-        name=str(new_prod_data.get("name", "")),
-        description=str(new_prod_data.get("description", "")),
-        price=float(new_prod_data.get("price", 0.0)),
-        quantity=int(new_prod_data.get("quantity", 0)),
-        products_list=current_list,
+    category1 = Category(
+        "Смартфоны",
+        "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни",
+        [product1, product2, product3]
     )
 
-    # Добавляем в категорию, если это новый объект
-    if new_obj not in current_list:
-        first_category.add_product(new_obj)
+    print(str(category1))
 
-    print("\nСписок товаров после обновления")
-    print(first_category.products)
+    print(category1.products)
 
-    # 4. Запрос на изменение цены у загруженного товара в случае, если она ниже старой цены
-    print("Запрос на изменение цены загруженного товара")
-    some_product = current_list[0]
-    some_product.price = some_product.price * 0.5  # Пробуем снизить на 50%
-
-
-if __name__ == "__main__":
-    main()
+    print(product1 + product2)
+    print(product1 + product3)
+    print(product2 + product3)

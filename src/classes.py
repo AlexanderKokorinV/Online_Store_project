@@ -46,6 +46,13 @@ class Product:
         else:
             self.__price = new_price
 
+    def __str__(self) -> str:
+        """Возвращает строковое представление продукта"""
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other: "Product") -> float:
+        """Складывает два продукта и возвращает полную стоимость всех товаров обоих видов на складе"""
+        return (self.price * self.quantity) + (other.price * other.quantity)
 
 class Category:
     """Класс для представления категорий"""
@@ -61,6 +68,14 @@ class Category:
         Category.category_count += 1
         Category.product_count += len(products)
 
+    def __str__(self) -> str:
+        """Строковое отображение категории"""
+        total_quantity = 0
+        for product in self.__products:
+            total_quantity += product.quantity
+
+        return f"{self.name}, количество продуктов: {total_quantity} шт."
+
     def add_product(self, product: Product) -> None:
         """Добавляет товары в категорию"""
         self.__products.append(product)
@@ -71,7 +86,7 @@ class Category:
         """Геттер, который выводит список товаров в виде строк в заданном формате"""
         result = ""
         for product in self.__products:
-            result += f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт. \n"
+            result += f"{product}\n"
         return result
 
     @property

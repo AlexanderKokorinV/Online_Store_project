@@ -46,7 +46,7 @@ def test_new_product_merge(product_iphone: Product) -> None:
 def test_category_products_format(product_iphone: Product) -> None:
     """Тест строкового представления товаров в категории через геттер"""
     category = Category("Смартфоны", "Описание", [product_iphone])
-    expected_output = "iPhone 15, 210000.0 руб. Остаток: 8 шт. \n"
+    expected_output = "iPhone 15, 210000.0 руб. Остаток: 8 шт.\n"
     assert category.products == expected_output
 
 
@@ -56,3 +56,33 @@ def test_add_product_logic(product_samsung: Product) -> None:
     initial_count = Category.product_count
     category.add_product(product_samsung)
     assert Category.product_count == initial_count + 1
+
+
+def test_product_str(product_iphone: Product) -> None:
+    """Тест строкового отображения продукта"""
+    assert str(product_iphone) == "iPhone 15, 210000.0 руб. Остаток: 8 шт."
+
+
+def test_category_str(product_iphone: Product, product_samsung: Product) -> None:
+    """Тест строкового отображения категории"""
+    category = Category("Смартфоны", "Описание", [product_iphone, product_samsung])
+
+    # iPhone (8 шт) + Samsung (5 шт) = 13 шт.
+    assert str(category) == "Смартфоны, количество продуктов: 13 шт."
+
+
+def test_product_add() -> None:
+    """Тест сложения двух продуктов (полная стоимость склада)"""
+    p1 = Product("Samsung", "Android", 100.0, 10)  # 100 * 10 = 1000
+    p2 = Product("iPhone", "iOS", 200.0, 2)  # 200 * 2 = 400
+
+    assert p1 + p2 == 1400.0
+
+
+def test_category_products_getter_with_str(product_iphone: Product) -> None:
+    """Тест геттера products в Category на использование __str__ продукта"""
+    category = Category("Тест", "Описание", [product_iphone])
+
+    # Геттер должен вернуть строку, сформированную через __str__ продукта
+    expected_output = "iPhone 15, 210000.0 руб. Остаток: 8 шт.\n"
+    assert category.products == expected_output
