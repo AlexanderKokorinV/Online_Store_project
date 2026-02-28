@@ -1,6 +1,4 @@
-from src.classes import Product, Category
-from src.utils import PATH_TO_JSON_FILE, get_data_from_json
-
+from src.classes import Category, Product
 
 
 if __name__ == '__main__':

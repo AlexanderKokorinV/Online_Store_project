@@ -54,6 +54,7 @@ class Product:
         """Складывает два продукта и возвращает полную стоимость всех товаров обоих видов на складе"""
         return (self.price * self.quantity) + (other.price * other.quantity)
 
+
 class Category:
     """Класс для представления категорий"""
 
