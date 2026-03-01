@@ -86,4 +86,3 @@ def test_category_products_getter_with_str(product_iphone: Product) -> None:
     # Геттер должен вернуть строку, сформированную через __str__ продукта
     expected_output = "iPhone 15, 210000.0 руб. Остаток: 8 шт.\n"
     assert category.products == expected_output
-

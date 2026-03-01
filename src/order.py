@@ -1,6 +1,7 @@
 from src.abstracts import BaseOrder
-from src.mixins import MixinLog
 from src.classes import Product
+from src.mixins import MixinLog
+
 
 class Order(MixinLog, BaseOrder):
     """Класс для представления заказа на один товар"""
@@ -9,17 +10,13 @@ class Order(MixinLog, BaseOrder):
         """Конструктор для инициализации заказа"""
 
         if not isinstance(product, Product):
-            raise TypeError # Заказ можно оформить только на объект класса Product или его наследников
+            raise TypeError  # Заказ можно оформить только на объект класса Product или его наследников
 
         self.__product = product
         self.name = product.name
         self.quantity = quantity
 
-        super().__init__(
-            name = self.name,
-            quantity = self.quantity
-        )
-
+        super().__init__(name=self.name, quantity=self.quantity)
 
     @property
     def total_cost(self) -> float:
@@ -34,6 +31,3 @@ class Order(MixinLog, BaseOrder):
     def __str__(self) -> str:
         """Строковое отображение заказа"""
         return f"Заказ: {self.__product.name}, {self.quantity} шт. Итого: {self.total_cost} руб."
-
-
-

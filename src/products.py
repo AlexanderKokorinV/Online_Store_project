@@ -1,5 +1,6 @@
 from src.classes import Product
 
+
 class Smartphone(Product):
     """Класс для представления категории Смартфоны"""
 

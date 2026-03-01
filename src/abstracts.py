@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
+
 class BaseProduct(ABC):
     """Базовый абстрактный класс, который является родительским для класса продуктов."""
 

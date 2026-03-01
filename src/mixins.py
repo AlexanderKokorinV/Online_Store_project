@@ -1,15 +1,19 @@
 from typing import Any
 
+
 class MixinLog:
     """Миксин для логирования создания объекта"""
-    name: str # Прописываем аннотации типов
+
+    name: str  # Прописываем аннотации типов
     description: str
     price: float
     quantity: int
 
     def __init__(self, name: str, description: str, price: float, quantity: int, **kwargs: Any) -> None:
         """Вызывает инициализацию родителя (BaseProduct)"""
-        super().__init__(name, description, price, quantity, **kwargs) # Инициализируем объект через родительские классы
+        super().__init__(
+            name, description, price, quantity, **kwargs
+        )  # Инициализируем объект через родительские классы
 
         print(repr(self))  # Выводим в консоль
 
@@ -21,4 +25,3 @@ class MixinLog:
             attributes.append(f"'{value}'" if isinstance(value, str) else str(value))
 
         return f"{self.__class__.__name__}({', '.join(attributes)})"
-

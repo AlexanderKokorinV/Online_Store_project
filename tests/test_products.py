@@ -1,6 +1,8 @@
 import pytest
-from src.products import Smartphone, LawnGrass
+
 from src.classes import Category
+from src.products import LawnGrass, Smartphone
+
 
 def test_smartphone_init() -> None:
     """Тест инициализации смартфона со специфичными атрибутами"""

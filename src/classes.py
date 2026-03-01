@@ -1,6 +1,8 @@
 from typing import List
-from src.abstracts import BaseProduct, BaseOrder
+
+from src.abstracts import BaseOrder, BaseProduct
 from src.mixins import MixinLog
+
 
 class Product(MixinLog, BaseProduct):
     """Класс для представления продуктов"""
@@ -9,7 +11,6 @@ class Product(MixinLog, BaseProduct):
         """Конструктор для продукта"""
         self.__price = price
         super().__init__(name, description, price, quantity)
-
 
     @classmethod
     def new_product(
@@ -116,5 +117,3 @@ class Category(MixinLog, BaseOrder):
     def total_quantity(self) -> int:
         """Суммарное количество всех единиц товара в категории"""
         return sum(p.quantity for p in self.__products)
-
-
