@@ -9,6 +9,10 @@ class Product(MixinLog, BaseProduct):
 
     def __init__(self, name: str, description: str, price: float, quantity: int):
         """Конструктор для продукта"""
+
+        if quantity == 0:
+            raise ValueError
+
         self.__price = price
         super().__init__(name, description, price, quantity)
 
@@ -117,3 +121,15 @@ class Category(MixinLog, BaseOrder):
     def total_quantity(self) -> int:
         """Суммарное количество всех единиц товара в категории"""
         return sum(p.quantity for p in self.__products)
+
+    def middle_price(self) -> float:
+        """Подсчитывает средний ценник всех товаров в категории. В случае исключений возвращает ноль"""
+        try:
+            total_sum = sum(product.price for product in self.__products) # Считаем сумму цен всех уникальных товаров
+            middle_price = total_sum / len(self.__products) # Делим на количество наименований (объектов в списке)
+            return round(middle_price, 2)
+
+        except ZeroDivisionError:
+            return 0.0 # Если список пуст, возвращаем ноль
+
+
