@@ -1,15 +1,15 @@
 from typing import List
+from src.abstracts import BaseProduct, BaseOrder
+from src.mixins import MixinLog
 
-
-class Product:
+class Product(MixinLog, BaseProduct):
     """Класс для представления продуктов"""
 
     def __init__(self, name: str, description: str, price: float, quantity: int):
         """Конструктор для продукта"""
-        self.name = name
-        self.description = description
         self.__price = price
-        self.quantity = quantity
+        super().__init__(name, description, price, quantity)
+
 
     @classmethod
     def new_product(
@@ -59,17 +59,20 @@ class Product:
         raise TypeError  # Если типы разные, вызываем исключение
 
 
-class Category:
+class Category(MixinLog, BaseOrder):
     """Класс для представления категорий"""
 
     category_count = 0  # Атрибут класса для подсчета категорий
     product_count = 0  # Атрибут класса для подсчета продуктов
 
-    def __init__(self, name: str, description: str, products: List[Product]):
+    def __init__(self, name: str, description: str, products: List[Product]) -> None:
         """Конструктор для категории"""
+
         self.name = name
         self.description = description
         self.__products = products
+
+        super().__init__(name, description, 0.0, len(products))
 
         Category.category_count += 1
         Category.product_count += len(products)
@@ -104,44 +107,14 @@ class Category:
         """Геттер, возвращающий сам список объектов"""
         return self.__products
 
+    @property
+    def total_cost(self) -> float:
+        """Полная стоимость всех товаров на складе в этой категории"""
+        return sum(p.price * p.quantity for p in self.__products)
 
-class Smartphone(Product):
-    """Класс для представления категории Смартфоны"""
-
-    def __init__(
-        self,
-        name: str,
-        description: str,
-        price: float,
-        quantity: int,
-        efficiency: float,
-        model: str,
-        memory: int,
-        color: str,
-    ) -> None:
-        """Конструктор для категории Смартфоны"""
-        super().__init__(name, description, price, quantity)
-        self.efficiency = efficiency
-        self.model = model
-        self.memory = memory
-        self.color = color
+    @property
+    def total_quantity(self) -> int:
+        """Суммарное количество всех единиц товара в категории"""
+        return sum(p.quantity for p in self.__products)
 
 
-class LawnGrass(Product):
-    """Класс для представления категории Трава газонная"""
-
-    def __init__(
-        self,
-        name: str,
-        description: str,
-        price: float,
-        quantity: int,
-        country: str,
-        germination_period: str,
-        color: str,
-    ) -> None:
-        """Конструктор для категории Трава газонная"""
-        super().__init__(name, description, price, quantity)
-        self.country = country
-        self.germination_period = germination_period
-        self.color = color
