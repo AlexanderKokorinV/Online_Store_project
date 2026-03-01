@@ -1,8 +1,8 @@
 from typing import List
 
 from src.abstracts import BaseOrder, BaseProduct
-from src.mixins import MixinLog
 from src.exceptions import ZeroQuantityError
+from src.mixins import MixinLog
 
 
 class Product(MixinLog, BaseProduct):
@@ -133,11 +133,9 @@ class Category(MixinLog, BaseOrder):
     def middle_price(self) -> float:
         """Подсчитывает средний ценник всех товаров в категории. В случае исключений возвращает ноль"""
         try:
-            total_sum = sum(product.price for product in self.__products) # Считаем сумму цен всех уникальных товаров
-            middle_price = total_sum / len(self.__products) # Делим на количество наименований (объектов в списке)
+            total_sum = sum(product.price for product in self.__products)  # Считаем сумму цен всех уникальных товаров
+            middle_price = total_sum / len(self.__products)  # Делим на количество наименований (объектов в списке)
             return round(middle_price, 2)
 
         except ZeroDivisionError:
-            return 0.0 # Если список пуст, возвращаем ноль
-
-
+            return 0.0  # Если список пуст, возвращаем ноль

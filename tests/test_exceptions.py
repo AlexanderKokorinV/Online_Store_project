@@ -1,4 +1,5 @@
 import pytest
+
 from src.classes import Category, Product
 from src.exceptions import ZeroQuantityError
 
@@ -9,6 +10,7 @@ def test_product_init_zero_quantity() -> None:
     with pytest.raises(ZeroQuantityError) as e_info:
         Product("Бракованный товар", "Неверное количество", 1000.0, 0)
         assert str(e_info.value) == "Товар с нулевым количеством не может быть добавлен"
+
 
 def test_product_init_positive_quantity() -> None:
     """Тест того, что обычное создание товара (количество > 0) проходит без ошибок"""
@@ -22,7 +24,7 @@ def test_category_average_price() -> None:
     p2 = Product("Товар 2", "Описание", 200.0, 10)
     category = Category("Электроника", "Описание", [p1, p2])
 
-    assert category.middle_price() == 150.0 # (100 + 200) / 2 = 150.0
+    assert category.middle_price() == 150.0  # (100 + 200) / 2 = 150.0
 
 
 def test_category_average_price_zero_division() -> None:
