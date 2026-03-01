@@ -2,6 +2,7 @@ from typing import List
 
 from src.abstracts import BaseOrder, BaseProduct
 from src.mixins import MixinLog
+from src.exceptions import ZeroQuantityError
 
 
 class Product(MixinLog, BaseProduct):
@@ -11,7 +12,7 @@ class Product(MixinLog, BaseProduct):
         """Конструктор для продукта"""
 
         if quantity == 0:
-            raise ValueError("Товар с нулевым количеством не может быть добавлен")
+            raise ZeroQuantityError("Товар с нулевым количеством не может быть добавлен")
 
         self.__price = price
         super().__init__(name, description, price, quantity)
@@ -92,12 +93,19 @@ class Category(MixinLog, BaseOrder):
 
     def add_product(self, product: Product) -> None:
         """Добавляет товары в категорию. Проверяет, является ли объект экземпляром класса Product или его наследником"""
-        if isinstance(product, Product):
+        try:
+            if not isinstance(product, Product):
+                raise TypeError("Можно добавить только объект Product или его наследников")
+
             self.__products.append(product)
             Category.product_count += 1
 
+        except ZeroQuantityError as e:
+            print(f"Ошибка: {e}")
         else:
-            raise TypeError  # Выбрасываем ошибку типа в случае попытки добавить не продукт
+            print("Товар успешно добавлен")
+        finally:
+            print("Обработка добавления товара завершена")
 
     @property
     def products(self) -> str:
